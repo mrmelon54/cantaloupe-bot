@@ -1,0 +1,41 @@
+{
+  "name": "mrmelon-bot-status",
+  "version": "1.0.0",
+  "description": "",
+  "main": "node bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bot.js"
+  },
+  "engines": {
+    "node": "10.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "MrMelon",
+  "license": "MIT",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "dependencies": {
+    "enmap": "^5.2.3",
+    "moment": "^2.24.0",
+    "moment-duration-format": "^2.2.2",
+    "express": "^4.16.4",
+    "download-git-repo": "^2.0.0",
+    "glob": "^7.1.5",
+    "node-fetch": "^2.6.0",
+    "request": "^2.88.0",
+    "valid-url": "^1.0.9",
+    "algebra.js": "^0.2.6",
+    "node-opus": "^0.3.2",
+    "ytdl-core": "^1.0.1",
+    "say": "^0.15.0",
+    "snekfetch": "^4.0.4",
+    "@types/snekfetch": "^4.0.2",
+    "discord.js": "^11.5.1"
+  }
+}

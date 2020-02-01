@@ -1,0 +1,13 @@
+{
+  "AboutMe": {
+    "token": "",
+    "botId": "605402325749596182",
+    "joinUrl": "https://discordapp.com/oauth2/authorize?client_id=605402325749596182&scope=bot",
+    "status": {
+      "status": "online",
+      "presence": "WATCHING",
+      "activity": "for awesome commands"
+    },
+    "ownerId":"222344019458392065"
+  }
+}

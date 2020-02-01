@@ -1,0 +1,14 @@
+```
+ - ~help = show this message
+ - ~ktaneidea <type> = get a random mod idea from the ktane mod ideas site
+ - ~egg = idk
+ - ~qr = idk try it
+ - ~emote <name> = show emojis
+ - ~sudo <bot> <command> = run commands
+ - ~math <equation> [letter] = do math
+ - ~revenge = play song in voice channel
+ - ~youtube = play music from a video
+ - ~stop = stop playing music
+ - ~stopall = stop all music
+ - ~say = try to speak
+```
