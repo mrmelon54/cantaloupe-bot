@@ -2,8 +2,6 @@ const fs = require("fs");
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
-const server = require("./server.js");
-server.sendClient(client);
 const algebra = require("algebra.js");
 const http = require("http");
 const { exec } = require("child_process");
@@ -68,24 +66,6 @@ function updateStatus() {
 client.on("message", async msg => {
   if (msg.author.bot) return;
   var cp = commandParser(msg.content);
-  if (
-    msg.content.toLowerCase().includes("nigga") ||
-    msg.content.toLowerCase().includes("nigger") ||
-    msg.content.toLowerCase().includes("niggar")
-  ) {
-    // excuse my use of this work but its to filter bad language
-    msg.delete();
-    for (var i = 0; i < 1; i++) {
-      msg.channel
-        .send(`**HEY, THAT'S RACIST U CAN'T SAY THE N WORD!!!**`)
-        .then(m => {
-          setTimeout(() => {
-            m.delete();
-          }, 5000);
-        });
-    }
-    return;
-  }
   if (msg.content.trim().toLowerCase() == "yeet") {
     msg.channel.send("YEET");
     return;
@@ -181,15 +161,7 @@ client.on("message", async msg => {
       config.AboutMe.ownerId == msg.author.id &&
       cmd.length >= 2
     ) {
-      var sendCmd = encodeURIComponent(
-        msg.content.replace(`~sudo ${cmd[1]}`, "").trim()
-      );
-      if (cmd[1] == "me") cmd[1] = "melon-overlord";
-      http.get(
-        `http://mrmelon-bots-status.glitch.me/cmd/?token=${serverToken}&action=${sendCmd}&to=${
-          cmd[1]
-        }&guild=${msg.guild.id}&channel=${msg.channel.id}`
-      );
+      msg.channel.send("Hey idiot just ssh to me");
     } else if (cmd[0] == "math") {
       if (cmd.length == 1) {
         msg.channel.send(
