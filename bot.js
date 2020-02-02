@@ -465,9 +465,9 @@ function getMCServerStatus(ip, msg) {
     body = JSON.parse(body);
     if (body.online) {
       var embed = new Discord.RichEmbed()
-        .setTitle("Minecraft server **online**");
-        .setDescription(ip + " (v" + body.version + ")");
-        .addField("MOTD", body.motd.clean.join("\n"));
+        .setTitle("Minecraft server **online**")
+        .setDescription(ip + " (v" + body.version + ")")
+        .addField("MOTD", body.motd.clean.join("\n"))
         .addField("Players",body.players.online + " of " + body.players.max + " online");
       if(body.players.online>0) {
         embed.addField("Player List", body.players.list.join(", "));
