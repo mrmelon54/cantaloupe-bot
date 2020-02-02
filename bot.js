@@ -466,29 +466,11 @@ function getMCServerStatus(ip, msg) {
     if (body.online) {
       var embed = new Discord.RichEmbed()
         .setTitle("Minecraft server **online**");
-      try {
-        embed.setDescription(ip + " (v" + body.version + ")");
-      } catch(e) {
-        console.log("Missing ~.version");
-        console.log(body);
-      }
-      try {
-        embed.addField("MOTD", body.motd.clean.join("\n"));
-      } catch(e) {
-        console.log("Missing ~.motd.clean");
-        console.log(body);
-      }
-      try {
-        embed.addField("Players",body.players.online + " of " + body.players.max + " online");
-      } catch(e) {
-        console.log("Missing ~.players.online or ~.players.max");
-        console.log(body);
-      }
-      try {
+        .setDescription(ip + " (v" + body.version + ")");
+        .addField("MOTD", body.motd.clean.join("\n"));
+        .addField("Players",body.players.online + " of " + body.players.max + " online");
+      if(body.players.online>0) {
         embed.addField("Player List", body.players.list.join(", "));
-      } catch(e) {
-        console.log("Missing ~.players.list");
-        console.log(body);
       }
       embed.setThumbnail("https://api.mcsrvstat.us/icon/" + ip);
     } else {
