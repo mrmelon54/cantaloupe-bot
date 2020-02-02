@@ -468,25 +468,25 @@ function getMCServerStatus(ip, msg) {
         .setTitle("Minecraft server **online**");
       try {
         embed.setDescription(ip + " (v" + body.version + ")");
-      } catch() {
+      } catch(e) {
         console.log("Missing ~.version");
         console.log(body);
       }
       try {
         embed.addField("MOTD", body.motd.clean.join("\n"));
-      } catch() {
+      } catch(e) {
         console.log("Missing ~.motd.clean");
         console.log(body);
       }
       try {
         embed.addField("Players",body.players.online + " of " + body.players.max + " online");
-      } catch() {
+      } catch(e) {
         console.log("Missing ~.players.online or ~.players.max");
         console.log(body);
       }
       try {
         embed.addField("Player List", body.players.list.join(", "));
-      } catch() {
+      } catch(e) {
         console.log("Missing ~.players.list");
         console.log(body);
       }
