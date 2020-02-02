@@ -465,15 +465,32 @@ function getMCServerStatus(ip, msg) {
     body = JSON.parse(body);
     if (body.online) {
       var embed = new Discord.RichEmbed()
-        .setTitle("Minecraft server **online**")
-        .setDescription(ip + " (v" + body.version + ")")
-        .addField("MOTD", body.motd.clean.join("\n"))
-        .addField(
-          "Players",
-          body.players.online + " of " + body.players.max + " online"
-        )
-        .addField("Player List", body.players.list.join(", "))
-        .setThumbnail("https://api.mcsrvstat.us/icon/" + ip);
+        .setTitle("Minecraft server **online**");
+      try {
+        embed.setDescription(ip + " (v" + body.version + ")");
+      } catch {
+        console.log("Missing ~.version");
+        console.log(body);
+      }
+      try {
+        embed.addField("MOTD", body.motd.clean.join("\n"));
+      } catch {
+        console.log("Missing ~.motd.clean");
+        console.log(body);
+      }
+      try {
+        embed.addField("Players",body.players.online + " of " + body.players.max + " online");
+      } catch {
+        console.log("Missing ~.players.online or ~.players.max");
+        console.log(body);
+      }
+      try {
+        embed.addField("Player List", body.players.list.join(", "));
+      } catch {
+        console.log("Missing ~.players.list");
+        console.log(body);
+      }
+      embed.setThumbnail("https://api.mcsrvstat.us/icon/" + ip);
     } else {
       var embed = new Discord.RichEmbed()
         .setTitle("Minecraft server **offline**")
