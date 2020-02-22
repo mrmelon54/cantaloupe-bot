@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
 const algebra = require("algebra.js");
+const mjs = require('math.js');
 const http = require("http");
 const { exec } = require("child_process");
 const ytdl = require("ytdl-core");
@@ -88,14 +89,14 @@ client.on("message", async msg => {
     msg.channel.send(a[Math.floor(Math.random() * (a.length - 1))]);
   }
   if (
-    ["/minecraft", "/mc"].includes(msg.content.trim().toLowerCase()) &&
+    ["~minecraft", "~mc"].includes(msg.content.trim().toLowerCase()) &&
     msg.guild.id.toString() == "571615112570601503"
   ) {
     getMCServerStatus(mcIP, msg);
     return;
   }
   if (
-    ["/minecraft", "/mc"].includes(msg.content.trim().toLowerCase()) &&
+    ["~minecraft", "~mc"].includes(msg.content.trim().toLowerCase()) &&
     msg.guild.id.toString() == "665837764666982413"
   ) {
     getMCServerStatus(almmcIP, msg);
