@@ -84,6 +84,10 @@ client.on("message", async msg => {
     msg.channel.send(a[Math.floor(Math.random() * (a.length - 1))]);
     return;
   }
+  if (msg.content.trim().toLowerCase() == "fyeetoof") {
+    msg.channel.send("What is this?");
+    return;
+  }
   if (msg.content.trim().toLowerCase() == "bruh") {
     var a = ["Bruh"];
     msg.channel.send(a[Math.floor(Math.random() * (a.length - 1))]);
