@@ -20,10 +20,42 @@ const streamOptions = { seek: 0, volume: 1 };
 
 var serverToken = "thiswasasecretpassword";
 
+var verifyguild='571615112570601503';
+var verifychannel='688768701637722176';
+var verifymsg='688769291860049958';
+var verifiedrole='688763467376754757';
+
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
   updateStatus();
+  var g=client.guilds.get(verifyguild);
+  if(g==undefined)return;
+  var c=g.channels.get(verifychannel);
+  if(c==undefined)return;
+  c.fetchMessage(verifymsg).then(m=>{
+    m.react('🍉');
+  })
 });
+
+client.on("messageReactionAdd", (r,u)=>{
+  if(r.message.id.toString()===verifymsg && r.emoji=='🍉') {
+    r.message.channel.guild.fetchMember(u).then(member=>{
+      member.addRole(verifiedrole).then(()=>{
+        member.createDM().then(dm=>{
+          dm.send(`You joined ${member.guild.name}`)
+        }).catch(()=>{})
+      }).catch(()=>{
+        member.createDM().then(dm=>{
+          dm.send(`I was unable to verify your account`)
+        }).catch(()=>{})
+      })
+    })
+  }
+});
+
+function unableToReactToMelonPlanelVerifyMessage() {
+  console.log("Unable to react to melon planet verify message");
+}
 
 function commandParser(_a) {
   var _o = {
