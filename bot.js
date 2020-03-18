@@ -13,7 +13,7 @@ const validUrl = require("valid-url");
 const request = require("request");
 
 var mcIP = "mc.onpointcoding.net";
-var almmcIP = "captainalmmc.skynode.host";
+var almmcIP = "captainalmmc.onpointcoding.net";
 var mcPort = 25565;
 
 const streamOptions = { seek: 0, volume: 1 };
