@@ -152,8 +152,8 @@ client.on("message", async msg => {
         client.emojis
           .find(
             x =>
-              x.name.toLowerCase().replace(/_/g, "") ==
-              cmd[1].toLowerCase().replace(/_/g, "")
+              x.name.toLowerCase().replace(/_/g, "").replace(/-/g, "") ==
+              cmd[1].toLowerCase().replace(/_/g, "").replace(/-/g, "")
           )
           .toString()
       );
