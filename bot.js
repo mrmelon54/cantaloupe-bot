@@ -29,18 +29,18 @@ var verifiedrole='688763467376754757';
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
   updateStatus();
-  var g=client.guilds.get(verifyguild);
-  if(g==undefined)return;
-  var c=g.channels.get(verifychannel);
-  if(c==undefined)return;
-  c.fetchMessage(verifymsg).then(m=>{
-    m.react('🍉');
-  })
+  var g=client.guilds.resolve(verifyguild);
+  if(g==undefined)return console.error("Can't find verify reaction guild");
+  var c=g.channels.resolve(verifychannel);
+  if(c==undefined)return console.error("Can't find verify reaction channel");
+  var d=c.messages.resolve(verifymsg);
+  if(d==undefined)return console.error("Can't find verify reaction message");
+  d.react('🍉');
 });
 
 client.on("messageReactionAdd", (r,u)=>{
   if(r.message.id.toString()===verifymsg && r.emoji=='🍉') {
-    r.message.channel.guild.fetchMember(u).then(member=>{
+    r.message.channel.guild.members.resolve(u).then(member=>{
       member.addRole(verifiedrole).then(()=>{
         member.createDM().then(dm=>{
           dm.send(`You joined ${member.guild.name}`)
@@ -148,6 +148,21 @@ client.on("message", async msg => {
         .setDescription(fs.readFileSync("help.txt").toString());
       msg.channel.send(e);
       return;
+    }
+
+    if (cmd[0] == "fakemsg" && cmd.length > 3) {
+      var username = cmd[1].toString();
+      var avatar = ""+cmd[2].toString();
+      var mess = cmd.splice(3).join(" ").toString();
+      msg.channel.createWebhook(username,{avatar:avatar,reason:"Automated messaging"}).then(webhook=>{
+        webhook.send(mess).then(()=>{
+          webhook.delete().then(()=>{}).catch(x=>console.error("webhook delete error",x));
+        }).catch(err=>{
+          webhook.delete().then(()=>{}).catch(x=>console.error("webhook delete error",x));
+          console.error("message send error",err);
+        })
+      }).catch(x=>console.error("webhook create error",x));
+      msg.delete();
     }
 
     if (cmd[0] == "ktaneidea") {

@@ -23,7 +23,7 @@
   "dependencies": {
     "@types/snekfetch": "^4.0.2",
     "algebra.js": "^0.2.6",
-    "discord.js": "^11.5.1",
+    "discord.js": "^12.0.2",
     "dotenv": "^8.2.0",
     "download-git-repo": "^2.0.0",
     "enmap": "^5.2.3",
