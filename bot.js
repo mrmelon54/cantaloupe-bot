@@ -21,7 +21,6 @@ const streamOptions = { seek: 0, volume: 1 };
 
 var serverToken = "thiswasasecretpassword";
 
-var verifyguild='571615112570601503';
 var verifychannel='688768701637722176';
 var verifymsg='688769291860049958';
 var verifiedrole='688763467376754757';
@@ -29,13 +28,11 @@ var verifiedrole='688763467376754757';
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
   updateStatus();
-  var g=client.guilds.resolve(verifyguild);
-  if(g==undefined)return console.error("Can't find verify reaction guild");
-  var c=g.channels.resolve(verifychannel);
-  if(c==undefined)return console.error("Can't find verify reaction channel");
-  var d=c.messages.resolve(verifymsg);
-  if(d==undefined)return console.error("Can't find verify reaction message");
-  d.react('🍉');
+  client.channels.fetch(verifychannel).then(channel=>{;
+    channel.messages.fetch(verifymsg).then(d=>{
+      d.react('🍉').then(()=>{}).catch(()=>{});
+    }).catch(()=>{});
+  }).catch(()=>{});
 });
 
 client.on("messageReactionAdd", (r,u)=>{
