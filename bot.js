@@ -140,7 +140,7 @@ client.on("message", async msg => {
     var cmd = cp.output;
 
     if (cmd[0] == "help" && cmd.length == 1) {
-      var e = new Discord.RichEmbed()
+      var e = new Discord.MessageEmbed()
         .setTitle("Overlord Bot Help")
         .setDescription(fs.readFileSync("help.txt").toString());
       msg.channel.send(e);
@@ -192,7 +192,7 @@ client.on("message", async msg => {
     } else if (msg.content.toLowerCase() == "~egg") {
       msg.channel.send("You think you found it do you well think again");
     } else if (msg.content.toLowerCase() == "~qr") {
-      var embed = new Discord.RichEmbed().setImage(
+      var embed = new Discord.MessageEmbed().setImage(
         "https://cdn.discordapp.com/emojis/610611944772075555.png?v=1"
       );
       msg.channel.send(embed);
@@ -461,7 +461,7 @@ function generateItemInfoEmbed(data) {
     notReady: 0xff0000,
     unknown: 0x777777
   };
-  var embed = new Discord.RichEmbed()
+  var embed = new Discord.MessageEmbed()
     .setTitle(modStates[data.state] + "   " + data.name.toString())
     .setColor(stateColours[data.state]);
   if (data.manualUrl !== "") {
@@ -514,7 +514,7 @@ function getMCServerStatus(ip, msg) {
     }
     body = JSON.parse(body);
     if (body.online) {
-      var embed = new Discord.RichEmbed()
+      var embed = new Discord.MessageEmbed()
         .setTitle("Minecraft server **online**")
         .setDescription(ip + " (v" + body.version + ")")
         .addField("MOTD", body.motd.clean.join("\n"))
@@ -524,7 +524,7 @@ function getMCServerStatus(ip, msg) {
       }
       embed.setThumbnail("https://api.mcsrvstat.us/icon/" + ip);
     } else {
-      var embed = new Discord.RichEmbed()
+      var embed = new Discord.MessageEmbed()
         .setTitle("Minecraft server **offline**")
         .setDescription("😭😭😭")
         .setThumbnail(
