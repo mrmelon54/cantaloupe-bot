@@ -5,7 +5,6 @@ const client = new Discord.Client();
 const config = require("./config.json");
 const algebra = require("algebra.js");
 //const mjs = require('math.js');
-const http = require("http");
 const { exec } = require("child_process");
 const ytdl = require("ytdl-core");
 const glob = require("glob");
@@ -15,11 +14,8 @@ const request = require("request");
 
 var mcIP = "mc.onpointcoding.net";
 var almmcIP = "captainalmmc.onpointcoding.net";
-var mcPort = 25565;
 
 const streamOptions = { seek: 0, volume: 1 };
-
-var serverToken = "thiswasasecretpassword";
 
 var verifychannel='688768701637722176';
 var verifymsg='688769291860049958';
@@ -33,6 +29,22 @@ client.on("ready", () => {
       d.react('🍉').then(()=>{}).catch(()=>{});
     }).catch(()=>{});
   }).catch(()=>{});
+  for(let i=0;i<config.ReactionRoles.length;i++) {
+    client.channels.fetch(config.ReactionRoles[i].channel).then(channel=>{
+      channel.messages.fetch(config.ReactionRoles[i].message).then(d=>{
+        var o=Object.keys(config.ReactionRoles[i].reactions);
+        for(let j=0;j<o.length;j++) {
+          d.react(o[j]).then(()=>{}).catch(()=>{
+            console.error("Can't react with "+o[j]);
+          });
+        }
+      }).catch(()=>{
+        console.error("Can't find reaction roles message " + config.ReactionRoles[i].message);
+      });
+    }).catch(()=>{
+      console.error("Can't find reaction roles channel "+config.ReactionRoles[i].channel);
+    });
+  }
 });
 
 client.on("messageReactionAdd", (r,u)=>{
@@ -48,8 +60,32 @@ client.on("messageReactionAdd", (r,u)=>{
         }).catch(()=>{})
       })
     })
+  } else {
+    var f = config.ReactionRoles.filter(x => x.message == r.message.id.toString());
+    if (f.length == 1) {
+      if (f[0].reactions.hasOwnProperty(r.emoji.id.toString())) {
+        r.message.guild.fetch().then(guild => {
+          guild.members.fetch(u.id.toString()).then(user => {
+            user.addRole(f.reactions[r.emoji.id.toString()]).then(()=>{}).catch(()=>{});
+          }).catch(()=>{})
+        }).catch(()=>{})
+      }
+    }
   }
 });
+
+client.on("messageReactionRemove",(r,u)=>{
+  var f=config.ReactionRoles.filter(x=>x.message==r.message.id.toString());
+  if(f.length==1) {
+    if(f[0].reactions.hasOwnProperty(r.emoji.id.toString())) {
+      r.message.guild.fetch().then(guild => {
+        guild.members.fetch(u.id.toString()).then(user => {
+          user.removeRole(f.reactions[r.emoji.id.toString()]).then(()=>{}).catch(()=>{});
+        }).catch(()=>{})
+      }).catch(()=>{})
+    }
+  }
+})
 
 function unableToReactToMelonPlanelVerifyMessage() {
   console.log("Unable to react to melon planet verify message");
