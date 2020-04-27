@@ -27,8 +27,12 @@ client.on("ready", () => {
   client.channels.fetch(verifychannel).then(channel=>{;
     channel.messages.fetch(verifymsg).then(d=>{
       d.react('🍉').then(()=>{}).catch(()=>{});
-    }).catch(()=>{});
-  }).catch(()=>{});
+    }).catch(()=>{
+      console.error("Can't find verify message");
+    });
+  }).catch(()=>{
+    console.error("Can't find verify channel");
+  });
   for(let i=0;i<config.ReactionRoles.length;i++) {
     client.channels.fetch(config.ReactionRoles[i].channel).then(channel=>{
       channel.messages.fetch(config.ReactionRoles[i].message).then(d=>{
@@ -48,27 +52,38 @@ client.on("ready", () => {
 });
 
 client.on("messageReactionAdd", (r,u)=>{
-  if(r.message.id.toString()===verifymsg && r.emoji=='🍉') {
-    r.message.channel.guild.members.resolve(u).then(member=>{
-      member.addRole(verifiedrole).then(()=>{
-        member.createDM().then(dm=>{
-          dm.send(`You joined ${member.guild.name}`)
-        }).catch(()=>{})
+  if(u.bot)return;
+  if(r.message.id.toString()===verifymsg && r.emoji.toString()=='🍉') {
+    r.message.channel.guild.fetch().then(guild=>{
+      guild.members.fetch(u.id.toString()).then(member=>{
+        member.roles.add(verifiedrole).then(()=>{
+          member.createDM().then(dm=>{
+            dm.send(`You joined ${member.guild.name}`)
+          }).catch(()=>{})
+        }).catch(()=>{
+          member.createDM().then(dm=>{
+            dm.send(`I was unable to verify your account`)
+          }).catch(()=>{})
+        })
       }).catch(()=>{
-        member.createDM().then(dm=>{
-          dm.send(`I was unable to verify your account`)
-        }).catch(()=>{})
+        console.error("VMRA: Can't fetch member");
       })
+    }).catch(()=>{
+      console.error("VMRA: Can't fetch guild");
     })
   } else {
     var f = config.ReactionRoles.filter(x => x.message == r.message.id.toString());
     if (f.length == 1) {
       if (f[0].reactions.hasOwnProperty(r.emoji.id.toString())) {
-        r.message.guild.fetch().then(guild => {
-          guild.members.fetch(u.id.toString()).then(user => {
-            user.addRole(f.reactions[r.emoji.id.toString()]).then(()=>{}).catch(()=>{});
-          }).catch(()=>{})
-        }).catch(()=>{})
+        r.message.channel.guild.fetch().then(guild => {
+          guild.members.fetch(u.id.toString()).then(member => {
+            member.roles.add(f[0].reactions[r.emoji.id.toString()]).then(()=>{}).catch(()=>{});
+          }).catch(()=>{
+            console.error("MRA: Can't fetch member");
+          })
+        }).catch(()=>{
+          console.error("MRA: Can't fetch guild");
+        })
       }
     }
   }
@@ -79,10 +94,14 @@ client.on("messageReactionRemove",(r,u)=>{
   if(f.length==1) {
     if(f[0].reactions.hasOwnProperty(r.emoji.id.toString())) {
       r.message.guild.fetch().then(guild => {
-        guild.members.fetch(u.id.toString()).then(user => {
-          user.removeRole(f.reactions[r.emoji.id.toString()]).then(()=>{}).catch(()=>{});
-        }).catch(()=>{})
-      }).catch(()=>{})
+        guild.members.fetch(u.id.toString()).then(member => {
+          member.roles.remove(f[0].reactions[r.emoji.id.toString()]).then(()=>{}).catch(()=>{});
+        }).catch(()=>{
+          console.error("MRR: Can't fetch member");
+        })
+      }).catch(()=>{
+        console.error("MRR: Can't fetch guild");
+      })
     }
   }
 })
