@@ -339,20 +339,20 @@ client.on("message", async msg => {
         }
       }
     } else if (msg.content.toLowerCase() == "~revenge") {
-      var vc = msg.member.voiceChannel;
+      var vc = msg.member.voice.channel;
       playSong(vc, "NeI-1Aq5CJw");
     } else if (
       ["yt", "youtube"].includes(cmd[0]) &&
       cmd.length == 2 &&
       msg.author.id == config.AboutMe.ownerId
     ) {
-      var vc = msg.member.voiceChannel;
+      var vc = msg.member.voice.channel;
       playSong(vc, cmd[1]);
     } else if (
       msg.content.toLowerCase() == "~stop" &&
       msg.author.id == config.AboutMe.ownerId
     ) {
-      var vc = msg.member.voiceChannel;
+      var vc = msg.member.voice.channel;
       vc.leave();
     } else if (
       msg.content.toLowerCase() == "~stopall" &&
