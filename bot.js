@@ -375,7 +375,7 @@ function playSong(vc, song) {
     const stream = ytdl(`https://www.youtube.com/watch?v=${song}`, {
       filter: "audioonly"
     });
-    const dispatcher = conn.playStream(stream, streamOptions);
+    const dispatcher = conn.play(stream, streamOptions);
     dispatcher.on("end", end => {
       vc.leave();
     });
