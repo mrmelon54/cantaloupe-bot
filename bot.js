@@ -3,8 +3,7 @@ const fs = require("fs");
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
-const algebra = require("algebra.js");
-//const mjs = require('math.js');
+const mathjs = require('math.js');
 const { exec } = require("child_process");
 const ytdl = require("ytdl-core");
 const glob = require("glob");
@@ -268,76 +267,7 @@ client.on("message", async msg => {
     ) {
       msg.channel.send("Hey idiot just ssh to me");
     } else if (cmd[0] == "math") {
-      if (cmd.length == 1) {
-        msg.channel.send(
-          `You have to send an equation to use \`~math\`\ne.g. \`~math "x^2 + 3x - 2 = 0"\` or \`~math 1+2\``
-        );
-        return;
-      }
-      cmd[1] = cmd[1].replace(/pi/g, Math.PI);
-      var o = [false, false];
-      for (var i = 0; i < cmd[1].length; i++) {
-        if ("abcdefghijklmnopqrstuvwxyz".split("").includes(cmd[1][i])) {
-          if (cmd.length == 3) {
-            o = [true, true];
-            break;
-          } else if (cmd.length == 2) {
-            o = [true, false];
-            break;
-          }
-        }
-      }
-      if (o[0] == true) {
-        if (o[1] == true) {
-          try {
-            var x1 = algebra.parse(cmd[1]);
-          } catch (e) {
-            msg.channel.send(
-              `**Math Error**\nI can't understand the equation ${
-                cmd[1]
-              }\nPing MrMelon if I need more maths classes!`
-            );
-          }
-          try {
-            var ans = x1.solveFor(cmd[2]).toString();
-            msg.channel.send(
-              `The answer to "\`${cmd[1]}\`" for "${cmd[2]}" is ${ans}`
-            );
-          } catch (e) {
-            msg.channel.send(
-              `**Math Error**\nI can't solve the equation ${
-                cmd[1]
-              }\nPing MrMelon if I just fucked up!`
-            );
-          }
-        } else {
-          try {
-            var x1 = algebra.parse(cmd[1]);
-            msg.channel.send(
-              `The equation simplifies to \`${x1.simplify().toString()}\``
-            );
-          } catch (e) {
-            msg.channel.send(
-              `**Math Error**\nI can't understand the equation ${
-                cmd[1]
-              }\nPing MrMelon if I need more maths classes!`
-            );
-          }
-        }
-      } else {
-        try {
-          var x1 = algebra.parse(cmd[1]);
-          msg.channel.send(
-            `The answer to "\`${cmd[1]}\`" is ${x1.simplify().toString()}`
-          );
-        } catch (e) {
-          msg.channel.send(
-            `**Math Error**\nI can't understand the equation ${
-              cmd[1]
-            }\nPing MrMelon if I need more maths classes!`
-          );
-        }
-      }
+      msg.channel.send(mathjs.eval(cmd.splice(1,cmd.length).join(" ")));
     } else if (msg.content.toLowerCase() == "~revenge") {
       var vc = msg.member.voice.channel;
       playSong(vc, "NeI-1Aq5CJw");
