@@ -306,15 +306,15 @@ client.on("message", async msg => {
       playSong(vc, "NeI-1Aq5CJw");
     } else if (
       ["yt", "youtube"].includes(cmd[0]) &&
-      cmd.length == 2 &&
+      cmd.length == 2
     ) {
       var vc = msg.member.voice.channel;
-      playSong(vc, cmd[1]);
+      try {playSong(vc, cmd[1]);}catch(e){}
     } else if (
       msg.content.toLowerCase() == "~stop"
     ) {
       var vc = msg.member.voice.channel;
-      vc.leave();
+      vc.leave().then(()=>{}).catch(()=>{});
     } else if (
       msg.content.toLowerCase() == "~stopall" &&
       config.AboutMe.ownerId === msg.author.id
@@ -340,7 +340,7 @@ function playSong(vc, song) {
     dispatcher.on("end", end => {
       vc.leave();
     });
-  });
+  }).catch(()=>{});
 }
 
 function speak(vc, text) {
