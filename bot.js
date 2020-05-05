@@ -307,13 +307,11 @@ client.on("message", async msg => {
     } else if (
       ["yt", "youtube"].includes(cmd[0]) &&
       cmd.length == 2 &&
-      msg.author.id == config.AboutMe.ownerId
     ) {
       var vc = msg.member.voice.channel;
       playSong(vc, cmd[1]);
     } else if (
-      msg.content.toLowerCase() == "~stop" &&
-      msg.author.id == config.AboutMe.ownerId
+      msg.content.toLowerCase() == "~stop"
     ) {
       var vc = msg.member.voice.channel;
       vc.leave();
