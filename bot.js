@@ -309,11 +309,21 @@ client.on("message", async msg => {
       ["yt", "youtube"].includes(cmd[0]) &&
       cmd.length == 2
     ) {
-      if(cmd[1]=="enable")youtubeenabled=true;
-      if(cmd[1]=="disable")youtubeenabled=false;
+      if(cmd[1]=="enable" && msg.author.id === config.AboutMe.ownerId) {
+        youtubeenabled=true;
+        msg.channel.send('Enabled youtube feature');
+        return;
+      }
+      if(cmd[1]=="disable" && msg.author.id === config.AboutMe.ownerId) {
+        youtubeenabled=false;
+        msg.channel.send('Disabled youtube feature');
+        return;
+      }
       if(youtubeenabled || msg.author.id === config.AboutMe.ownerId) {
         var vc = msg.member.voice.channel;
         try{playSong(vc, cmd[1]);}catch(e){}
+      } else {
+        msg.channel.send('This feature might be disabled');
       }
     } else if (
       msg.content.toLowerCase() == "~stop"
@@ -322,7 +332,7 @@ client.on("message", async msg => {
       vc.leave().then(()=>{}).catch(()=>{});
     } else if (
       msg.content.toLowerCase() == "~stopall" &&
-      config.AboutMe.ownerId === msg.author.id
+      config.AboutMe.ownerId == msg.author.id
     ) {
       client.voiceConnections.map(b => b.channel.leave());
     } else if (
