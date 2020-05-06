@@ -309,9 +309,9 @@ client.on("message", async msg => {
       ["yt", "youtube"].includes(cmd[0]) &&
       cmd.length == 2
     ) {
-      if(cmd[1]=="enable")youtubeenable=true;
-      if(cmd[1]=="disable")youtubeenable=false;
-      if(youtubeenable || msg.author.id === config.AboutMe.ownerId) {
+      if(cmd[1]=="enable")youtubeenabled=true;
+      if(cmd[1]=="disable")youtubeenabled=false;
+      if(youtubeenabled || msg.author.id === config.AboutMe.ownerId) {
         var vc = msg.member.voice.channel;
         try{playSong(vc, cmd[1]);}catch(e){}
       }
