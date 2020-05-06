@@ -41,6 +41,7 @@ const streamOptions = { seek: 0, volume: 1 };
 var verifychannel='688768701637722176';
 var verifymsg='688769291860049958';
 var verifiedrole='688763467376754757';
+var youtubeenabled=true;
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -303,13 +304,17 @@ client.on("message", async msg => {
       }
     } else if (msg.content.toLowerCase() == "~revenge") {
       var vc = msg.member.voice.channel;
-      playSong(vc, "NeI-1Aq5CJw");
+      try{playSong(vc, "NeI-1Aq5CJw");}catch(e){}
     } else if (
       ["yt", "youtube"].includes(cmd[0]) &&
       cmd.length == 2
     ) {
-      var vc = msg.member.voice.channel;
-      try {playSong(vc, cmd[1]);}catch(e){}
+      if(cmd[1]=="enable")youtubeenable=true;
+      if(cmd[1]=="disable")youtubeenable=false;
+      if(youtubeenable || msg.author.id === config.AboutMe.ownerId) {
+        var vc = msg.member.voice.channel;
+        try{playSong(vc, cmd[1]);}catch(e){}
+      }
     } else if (
       msg.content.toLowerCase() == "~stop"
     ) {
