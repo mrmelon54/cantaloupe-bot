@@ -3,13 +3,35 @@ const fs = require("fs");
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
-const mathjs = require('math.js');
+var mathjs = {
+  create:require('mathjs').create,
+  all:require('mathjs').all,
+  simplify:require('mathjs').simplify,
+  format:require('mathjs').format
+};
+const math = mathjs.create(mathjs.all);
 const { exec } = require("child_process");
 const ytdl = require("ytdl-core");
 const glob = require("glob");
 const gitDownload = require("download-git-repo");
 const validUrl = require("valid-url");
 const request = require("request");
+
+function mathjsNoImport () {
+  throw new Error('function import is disabled.')
+}
+math.import({import:mathjsNoImport},{override:true});
+
+function mathjsevaluate(expr) {
+  var ans = math.evaluate(expr)
+  return mathjs.format(ans)
+}
+function mathjssimplify(expr) {
+  console.log("Doing math: "+expr.toString());
+  var ans = mathjs.simplify(expr)
+  console.log(ans);
+  return ans.toString()
+}
 
 var mcIP = "mc.onpointcoding.net";
 var almmcIP = "captainalmmc.onpointcoding.net";
@@ -267,7 +289,18 @@ client.on("message", async msg => {
     ) {
       msg.channel.send("Hey idiot just ssh to me");
     } else if (cmd[0] == "math") {
-      msg.channel.send(mathjs.eval(cmd.splice(1,cmd.length).join(" ")));
+      var expr=cmd.splice(1,cmd.length).join(" ");
+      try {
+        console.log("Evaluating: "+expr);
+        msg.channel.send("Math result: "+mathjsevaluate(expr));
+      } catch(e) {
+        try {
+          console.log("Simplifying: "+expr);
+          msg.channel.send("Math result: "+mathjssimplify(expr));
+        } catch(e) {
+          msg.channel.send("Sorry I need more math classes 😭");
+        }
+      }
     } else if (msg.content.toLowerCase() == "~revenge") {
       var vc = msg.member.voice.channel;
       playSong(vc, "NeI-1Aq5CJw");
