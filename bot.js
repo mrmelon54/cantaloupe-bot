@@ -55,20 +55,23 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         let newUserChannel = newMember.channel
 
         if (newUserChannel != undefined) {
-          if (uservc[newMember.id.toString()] != undefined) {
-            if (uservc[newMember.id.toString()].time.getTime() > new Date().getTime() - 120000) {
-              client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
-                speak(
-                  newUserChannel,
-                  'Moving you back to ' + c.name,
-                  (callback = () => {
-                    newMember.setChannel(c)
-                  })
-                )
-              })
+          if (newUserChannel.id.toString() == config.VoiceChannels.WaitingRoom) {
+            if (uservc[newMember.id.toString()] != undefined) {
+              if (uservc[newMember.id.toString()].time.getTime() > new Date().getTime() - 120000) {
+                client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
+                  speak(
+                    newUserChannel,
+                    'Moving you back to ' + c.name,
+                    (callback = () => {
+                      console.log("Moving " + newMember.name + " to "+ c.name)
+                      newMember.setChannel(c)
+                    })
+                  )
+                })
+              }
+            } else {
+              speak(newUserChannel, 'Welcome to the waiting room')
             }
-          } else {
-            if (newUserChannel.id.toString() == config.VoiceChannels.WaitingRoom) speak(newUserChannel, 'Welcome to the waiting room')
           }
         } else if (oldUserChannel != undefined && newUserChannel == undefined) {
           uservc[oldMember.id.toString()] = { channel: oldUserChannel.id.toString(), time: new Date() }
