@@ -56,7 +56,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
 
         if (newUserChannel != undefined) {
           if (uservc[newMember.id.toString()] != undefined) {
-            if (uservc[newMember.id.toString()].time.getTime() < new Date().getTime() - 120000) {
+            if (uservc[newMember.id.toString()].time.getTime() > new Date().getTime() - 120000) {
               client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
                 speak(
                   'Moving you back to ' + c.name,
