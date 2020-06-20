@@ -38,10 +38,9 @@ var almmcIP = 'captainalmmc.onpointcoding.net'
 
 const streamOptions = { seek: 0, volume: 1 }
 
-var verifychannel = '688768701637722176'
-var verifymsg = '688769291860049958'
-var verifiedrole = '688763467376754757'
 var youtubeenabled = true
+var uservc = {}
+// { channel: <lastchannelid>, time: <lasttimeinchannel> }
 
 client.on('voiceStateUpdate', (oldMember, newMember) => {
   client.users
@@ -56,8 +55,22 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         let newUserChannel = newMember.channel
 
         if (newUserChannel != undefined) {
-          if (newUserChannel.id.toString() == config.VoiceChannels.WaitingRoom) speak(newUserChannel, 'Welcome to the waiting room')
+          if (uservc[newMember.id.toString()] != undefined) {
+            if (uservc[newMember.id.toString()].time.getTime() < new Date().getTime() - 120000) {
+              client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
+                speak(
+                  'Moving you back to ' + c.name,
+                  (callback = () => {
+                    newMember.setChannel(c)
+                  })
+                )
+              })
+            }
+          } else {
+            if (newUserChannel.id.toString() == config.VoiceChannels.WaitingRoom) speak(newUserChannel, 'Welcome to the waiting room')
+          }
         } else if (oldUserChannel != undefined && newUserChannel == undefined) {
+          uservc[oldMember.id.toString()] = { channel: oldUserChannel.id.toString(), time: new Date() }
           if (oldMember.id.toString() == config.AboutMe.ownerId) speak(oldUserChannel, 'MrMelon disconnected')
         }
       }
@@ -68,10 +81,10 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`)
   updateStatus()
   client.channels
-    .fetch(verifychannel)
+    .fetch(config.Verify.channel)
     .then(channel => {
       channel.messages
-        .fetch(verifymsg)
+        .fetch(config.Verify.message)
         .then(d => {
           d.react('🍉')
             .then(() => {})
@@ -112,7 +125,7 @@ client.on('ready', () => {
 
 client.on('messageReactionAdd', (r, u) => {
   if (u.bot) return
-  if (r.message.id.toString() === verifymsg && r.emoji.toString() == '🍉') {
+  if (r.message.id.toString() === config.Verify.message && r.emoji.toString() == '🍉') {
     r.message.channel.guild
       .fetch()
       .then(guild => {
@@ -120,7 +133,7 @@ client.on('messageReactionAdd', (r, u) => {
           .fetch(u.id.toString())
           .then(member => {
             member.roles
-              .add(verifiedrole)
+              .add(config.Verify.role)
               .then(() => {
                 member
                   .createDM()
@@ -423,7 +436,7 @@ function playSong(vc, song) {
     .catch(() => {})
 }
 
-function speak(vc, text, speed = 130, voice = 'english-us') {
+function speak(vc, text, speed = 130, voice = 'english-us', callback = null) {
   var filename = `${__dirname}/recordings/speech-${new Date().getTime()}.wav`
 
   exec(`"${__dirname}/espeak/espeak" --path "${__dirname}/espeak" "${text.replace(/"/g, '')}" -s "${speed.toString().replace(/"/g, '')}" -v "${voice.replace(/"/g, '')}" -w "${filename.replace(/"/g, '')}"`, err => {
@@ -435,7 +448,15 @@ function speak(vc, text, speed = 130, voice = 'english-us') {
     vc.join().then(conn => {
       const dispatcher = conn.play(filename)
       dispatcher.on('speaking', end => {
-        if (!end) vc.leave()
+        if (!end) {
+          vc.leave()
+          setTimeout(() => {
+            fs.unlinkSync(filename)
+            if (callback != undefined && callback != null) {
+              callback()
+            }
+          }, 1000)
+        }
       })
     })
   })
