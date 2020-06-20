@@ -54,7 +54,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         let oldUserChannel = oldMember.channel
         let newUserChannel = newMember.channel
 
-        if (oldUserChannel.id.toString() == newUserChannel.id.toString()) return
+        if (oldUserChannel!=undefined && newUserChannel!=undefined && oldUserChannel.id.toString() == newUserChannel.id.toString()) return
 
         if (newUserChannel != undefined) {
           if (newUserChannel.id.toString() == config.VoiceChannels.MelonRoom) {
@@ -63,7 +63,6 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             if (uservc[newMember.id.toString()] != undefined && uservc[newMember.id.toString()].type == 1 && uservc[newMember.id.toString()].time.getTime() > new Date().getTime() - 120000) {
               client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
                 speak(newUserChannel, 'Moving you back to ' + c.name, null, null, () => {
-                  console.log('Moving ' + newMember.name + ' to ' + c.name)
                   newMember.setChannel(c)
                 })
               })
