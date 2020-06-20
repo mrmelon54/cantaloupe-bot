@@ -54,6 +54,8 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         let oldUserChannel = oldMember.channel
         let newUserChannel = newMember.channel
 
+        if (oldUserChannel.id.toString() == newUserChannel.id.toString()) return
+
         if (newUserChannel != undefined) {
           if (newUserChannel.id.toString() == config.VoiceChannels.MelonRoom) {
             newMember.member.roles.add(config.AboutMe.MelonVCRole)
