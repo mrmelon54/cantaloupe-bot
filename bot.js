@@ -55,7 +55,9 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         let newUserChannel = newMember.channel
 
         if (newUserChannel != undefined) {
-          if (newUserChannel.id.toString() == config.VoiceChannels.WaitingRoom) {
+          if (newUserChannel.id.toString() == config.VoiceChannels.MelonRoom) {
+            newMember.member.roles.add(config.AboutMe.MelonVCRole)
+          } else if (newUserChannel.id.toString() == config.VoiceChannels.WaitingRoom) {
             if (uservc[newMember.id.toString()] != undefined && uservc[newMember.id.toString()].time.getTime() > new Date().getTime() - 120000) {
               client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
                 speak(newUserChannel, 'Moving you back to ' + c.name, null, null, () => {
@@ -69,6 +71,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             }
           }
         } else if (oldUserChannel != undefined && newUserChannel == undefined) {
+          oldMember.member.roles.remove(config.AboutMe.MelonVCRole)
           if (oldUserChannel.id.toString() != config.VoiceChannels.WaitingRoom) uservc[oldMember.id.toString()] = { channel: oldUserChannel.id.toString(), time: new Date() }
         }
       }
