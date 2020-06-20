@@ -59,14 +59,10 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             if (uservc[newMember.id.toString()] != undefined) {
               if (uservc[newMember.id.toString()].time.getTime() > new Date().getTime() - 120000) {
                 client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
-                  speak(
-                    newUserChannel,
-                    'Moving you back to ' + c.name,
-                    (callback = () => {
-                      console.log("Moving " + newMember.name + " to "+ c.name)
-                      newMember.setChannel(c)
-                    })
-                  )
+                  speak(newUserChannel, 'Moving you back to ' + c.name, null, null, () => {
+                    console.log('Moving ' + newMember.name + ' to ' + c.name)
+                    newMember.setChannel(c)
+                  })
                 })
               }
             } else {
@@ -439,7 +435,9 @@ function playSong(vc, song) {
     .catch(() => {})
 }
 
-function speak(vc, text, speed = 130, voice = 'english-us', callback = null) {
+function speak(vc, text, speed = null, voice = null, callback = null) {
+  if (speed == null) speed = 130
+  if (voice == null) voice = 'english-us'
   var filename = `${__dirname}/recordings/speech-${new Date().getTime()}.wav`
 
   exec(`"${__dirname}/espeak/espeak" --path "${__dirname}/espeak" "${text.replace(/"/g, '')}" -s "${speed.toString().replace(/"/g, '')}" -v "${voice.replace(/"/g, '')}" -w "${filename.replace(/"/g, '')}"`, err => {
