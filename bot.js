@@ -59,7 +59,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             if (uservc[newMember.id.toString()].time.getTime() > new Date().getTime() - 120000) {
               client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
                 speak(
-                  c,
+                  newUserChannel,
                   'Moving you back to ' + c.name,
                   (callback = () => {
                     newMember.setChannel(c)
@@ -72,7 +72,6 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
           }
         } else if (oldUserChannel != undefined && newUserChannel == undefined) {
           uservc[oldMember.id.toString()] = { channel: oldUserChannel.id.toString(), time: new Date() }
-          if (oldMember.id.toString() == config.AboutMe.ownerId) speak(oldUserChannel, 'MrMelon disconnected')
         }
       }
     })
