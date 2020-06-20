@@ -56,21 +56,20 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
 
         if (newUserChannel != undefined) {
           if (newUserChannel.id.toString() == config.VoiceChannels.WaitingRoom) {
-            if (uservc[newMember.id.toString()] != undefined) {
-              if (uservc[newMember.id.toString()].time.getTime() > new Date().getTime() - 120000) {
-                client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
-                  speak(newUserChannel, 'Moving you back to ' + c.name, null, null, () => {
-                    console.log('Moving ' + newMember.name + ' to ' + c.name)
-                    newMember.setChannel(c)
-                  })
+            if (uservc[newMember.id.toString()] != undefined && uservc[newMember.id.toString()].time.getTime() > new Date().getTime() - 120000) {
+              client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
+                speak(newUserChannel, 'Moving you back to ' + c.name, null, null, () => {
+                  console.log('Moving ' + newMember.name + ' to ' + c.name)
+                  newMember.setChannel(c)
                 })
-              }
+              })
             } else {
+              delete uservc[newMember.id.toString()]
               speak(newUserChannel, 'Welcome to the waiting room')
             }
           }
         } else if (oldUserChannel != undefined && newUserChannel == undefined) {
-          uservc[oldMember.id.toString()] = { channel: oldUserChannel.id.toString(), time: new Date() }
+          if (oldUserChannel.id.toString() != config.VoiceChannels.WaitingRoom) uservc[oldMember.id.toString()] = { channel: oldUserChannel.id.toString(), time: new Date() }
         }
       }
     })
