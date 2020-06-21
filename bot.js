@@ -74,9 +74,10 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
               speak(newUserChannel, 'Welcome to the waiting room')
             }
           }
-        } else if (oldUserChannel != undefined) { // disconnected from channel
+        }
+        if (oldUserChannel != undefined) { // disconnected from channel
           oldMember.member.roles.remove(config.AboutMe.MelonVCRole)
-          if (newMember == undefined) {
+          if (newUserChannel == undefined) {
             // disconnected from all voice channels
             // prevent setting waiting room as last channel
             if (oldUserChannel.id.toString() != config.VoiceChannels.WaitingRoom) uservc[oldMember.id.toString()] = { channel: oldUserChannel.id.toString(), time: new Date(), type: 1 }
