@@ -76,7 +76,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
           }
         }
         if (oldUserChannel != undefined) { // disconnected from channel
-          oldMember.member.roles.remove(config.AboutMe.MelonVCRole)
+          if (newUserChannel == undefined || newUserChannel != config.VoiceChannels.MelonRoom) oldMember.member.roles.remove(config.AboutMe.MelonVCRole)
           if (newUserChannel == undefined) {
             // disconnected from all voice channels
             // prevent setting waiting room as last channel
