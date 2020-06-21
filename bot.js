@@ -54,25 +54,33 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         let oldUserChannel = oldMember.channel
         let newUserChannel = newMember.channel
 
-        if (oldUserChannel!=undefined && newUserChannel!=undefined && oldUserChannel.id.toString() == newUserChannel.id.toString()) return
-        if (oldUserChannel.id.toString() == config.VoiceChannels.MelonRoom) oldMember.member.roles.remove(config.AboutMe.MelonVCRole)
+        // in the same channel so ignore the event
+        if (oldUserChannel != undefined && newUserChannel != undefined && oldUserChannel.id.toString() == newUserChannel.id.toString()) return
 
-        if (newUserChannel != undefined) {
+        if (newUserChannel != undefined) { // connected to a channel from anywhere
           if (newUserChannel.id.toString() == config.VoiceChannels.MelonRoom) newMember.member.roles.add(config.AboutMe.MelonVCRole)
           else if (newUserChannel.id.toString() == config.VoiceChannels.WaitingRoom) {
+            // connected to waiting room
             if (uservc[newMember.id.toString()] != undefined && uservc[newMember.id.toString()].type == 1 && uservc[newMember.id.toString()].time.getTime() > new Date().getTime() - 120000) {
               client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
+                // user needs moving back to a channel
                 speak(newUserChannel, 'Moving you back to ' + c.name, null, null, () => {
                   newMember.setChannel(c)
                 })
               })
             } else {
+              // time has expire and saved channel can be removed
               delete uservc[newMember.id.toString()]
               speak(newUserChannel, 'Welcome to the waiting room')
             }
           }
-        } else if (oldUserChannel != undefined && newUserChannel == undefined) {
-          if (oldUserChannel.id.toString() != config.VoiceChannels.WaitingRoom) uservc[oldMember.id.toString()] = { channel: oldUserChannel.id.toString(), time: new Date(), type: 1 }
+        } else if (oldUserChannel != undefined) { // disconnected from channel
+          oldMember.member.roles.remove(config.AboutMe.MelonVCRole)
+          if (newMember == undefined) {
+            // disconnected from all voice channels
+            // prevent setting waiting room as last channel
+            if (oldUserChannel.id.toString() != config.VoiceChannels.WaitingRoom) uservc[oldMember.id.toString()] = { channel: oldUserChannel.id.toString(), time: new Date(), type: 1 }
+          }
         }
       }
     })
