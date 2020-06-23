@@ -38,7 +38,8 @@ var almmcIP = 'captainalmmc.onpointcoding.net'
 
 const streamOptions = { seek: 0, volume: 1 }
 
-var youtubeenabled = true
+// disable by default so people breaking it can't use it again afterwards
+var youtubeenabled = false
 var uservc = {}
 // { channel: <lastchannelid>, time: <lasttimeinchannel>, type:0 }
 
