@@ -421,9 +421,7 @@ client.on('message', async msg => {
       }
     } else if (msg.content.toLowerCase() == '~stop') {
       var vc = msg.member.voice.channel
-      vc.leave()
-        .then(() => {})
-        .catch(() => {})
+      vc.leave().catch(() => {})
     } else if (msg.content.toLowerCase() == '~stopall' && config.AboutMe.ownerId == msg.author.id) {
       client.voice.connections.each(b => b.channel.leave())
     } else if (cmd[0] == 'say' && cmd.length > 1 && msg.author.id == config.AboutMe.ownerId) {
@@ -436,7 +434,7 @@ client.on('message', async msg => {
 function playSong(vc, song) {
   vc.join()
     .then(conn => {
-      const stream = ytdl(`https://www.youtube.com/watch?v=${song}`, {
+      const stream = ytdl(song, {
         filter: 'audioonly',
       })
       const dispatcher = conn.play(stream, streamOptions)
@@ -444,7 +442,10 @@ function playSong(vc, song) {
         if (!end) vc.leave()
       })
     })
-    .catch(() => {})
+    .catch((err) => {
+      console.error(err)
+      vc.leave().catch(()=>{})
+    })
 }
 
 function speak(vc, text, speed = null, voice = null, callback = null) {
