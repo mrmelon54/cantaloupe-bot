@@ -119,9 +119,10 @@ function updateMemberNickname(n) {
     if (symbols == undefined) return;
     if (name == undefined) return;
     var uname = symbols + (symbols == "" ? "" : " ") + name;
-    console.log("Updated " + n.user.tag + " nickname to " + uname);
+    if (uname == n.displayName) return;
     if (uname == n.nickname) return;
     if (uname == undefined) return;
+    console.log("Updated " + n.user.tag + " nickname to " + uname);
     n.setNickname(uname).then(() => {}).catch(() => {});
   }
 }
