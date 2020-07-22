@@ -8,8 +8,7 @@
       "presence": "WATCHING",
       "activity": "for awesome commands"
     },
-    "ownerId": "222344019458392065",
-    "MelonVCRole": "723948818932039680"
+    "ownerId": "222344019458392065"
   },
   "Verify": {
     "channel": "688768701637722176",
@@ -40,8 +39,29 @@
   "VoiceChannels": {
     "WaitingRoom": "693595853843071010",
     "MelonRoom": "709015537388355645",
+    "AdminRoom": "728722142082105354",
+    "StaffRoom": "577815459840393217",
     "General1": "579432471419158528",
     "General2": "579432514729279488",
     "Stream": "647804017166254091"
-  }
+  },
+  "VoiceRoles": {
+    "MelonRoom": "723948818932039680",
+    "AdminRoom": "735454058432823419",
+    "StaffRoom": "735454257360404563"
+  },
+  "rolesymbolsserver": "571615112570601503",
+  "rolesymbols": [{
+      "symbol": "❀",
+      "id": 571615443664633857
+    },
+    {
+      "symbol": "✾",
+      "id": 728709331515605023
+    },
+    {
+      "symbol": "♢",
+      "id": 571615479085531156
+    }
+  ]
 }
