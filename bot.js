@@ -123,7 +123,7 @@ function updateMemberNickname(n) {
     if (uname == n.nickname) return;
     if (uname == undefined) return;
     console.log("Updated " + n.user.tag + " nickname to " + uname);
-    n.setNickname(uname).then(() => {}).catch(() => {});
+    n.setNickname(uname, "Update username role symbols").then(() => {}).catch(() => {});
   }
 }
 
