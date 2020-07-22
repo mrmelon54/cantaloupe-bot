@@ -35,6 +35,7 @@
     "request": "^2.88.0",
     "say": "^0.15.0",
     "snekfetch": "^4.0.4",
+    "sodium": "^3.0.2",
     "utf-8-validate": "^5.0.2",
     "valid-url": "^1.0.9",
     "ytdl-core": "^1.0.1"
