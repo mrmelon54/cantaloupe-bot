@@ -118,7 +118,9 @@ function updateMemberNickname(n) {
     var name = n.displayName.replace(new RegExp(`[${config.rolesymbols.map(y=>y.symbol)}]`, 'g'), "").trim();
     if (symbols == undefined) return;
     if (name == undefined) return;
+    if (name == "") name = n.user.username;
     var uname = symbols + (symbols == "" ? "" : " ") + name;
+    if (uname.length > 32) uname = uname.substring(0, 32-3) + "...";
     if (uname == n.displayName) return;
     if (uname == n.nickname) return;
     if (uname == undefined) return;
