@@ -63,5 +63,10 @@
       "symbol": "♢",
       "id": 571615479085531156
     }
-  ]
+  ],
+  "MinecraftServers": {
+    "571615112570601503": "mc.onpointcoding.net",
+    "665837764666982413": "captainalmmc.onpointcoding.net",
+    "568189491349815316": "kckmapmaking.aternos.me"
+  }
 }

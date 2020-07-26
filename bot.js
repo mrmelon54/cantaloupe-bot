@@ -43,9 +43,6 @@ function mathjssimplify(expr) {
   return ans.toString()
 }
 
-var mcIP = 'mc.onpointcoding.net'
-var almmcIP = 'captainalmmc.onpointcoding.net'
-
 const streamOptions = {
   seek: 0,
   volume: 1
@@ -283,12 +280,8 @@ client.on('message', async msg => {
     var a = ['Bruh']
     msg.channel.send(a[Math.floor(Math.random() * (a.length - 1))])
   }
-  if (['~minecraft', '~mc'].includes(msg.content.trim().toLowerCase()) && msg.guild.id.toString() == '571615112570601503') {
-    getMCServerStatus(mcIP, msg)
-    return
-  }
-  if (['~minecraft', '~mc'].includes(msg.content.trim().toLowerCase()) && msg.guild.id.toString() == '665837764666982413') {
-    getMCServerStatus(almmcIP, msg)
+  if (['~minecraft', '~mc'].includes(msg.content.trim().toLowerCase()) && config.MinecraftServers.hasOwnProperty(msg.guild.id.toString())) {
+    getMCServerStatus(config.MinecraftServers[msg.guild.id.toString()], msg);
     return
   }
   if (cp.isCmd) {
