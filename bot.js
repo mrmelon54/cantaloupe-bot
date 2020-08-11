@@ -108,23 +108,7 @@ client.on("guildMemberUpdate", (o, n) => {
 });
 
 function updateMemberNickname(n) {
-  if (n.guild.id.toString() === config.rolesymbolsserver) {
-    if (n.user.bot) return;
-    var symbols = config.rolesymbols.map(y => (n.roles.cache.some(x => x.id == y.id) ? y.symbol : null)).filter(x => x != null).join(" ");
-    if (symbols.length > 1) symbols = symbols.split(" ")[0];
-    var name = n.displayName.replace(new RegExp(`[${config.rolesymbols.map(y=>y.symbol)}]`, 'g'), "").trim();
-    if (symbols == undefined) return;
-    if (name == undefined) return;
-    if (name == "") name = n.user.username;
-    var uname = symbols + (symbols == "" ? "" : " ") + name;
-    if (config.SymbolBlacklist.includes(n.user.id.toString())) uname = name;
-    if (uname.length > 32) uname = uname.substring(0, 32-3) + "...";
-    if (uname == n.displayName) return;
-    if (uname == n.nickname) return;
-    if (uname == undefined) return;
-    console.log("Updated " + n.user.tag + " nickname to " + uname);
-    n.setNickname(uname, "Update username role symbols").then(() => {}).catch(() => {});
-  }
+  // I think I just removed symbols from nicknames
 }
 
 client.on('ready', () => {
