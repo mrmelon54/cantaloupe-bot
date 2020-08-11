@@ -117,7 +117,7 @@ function updateMemberNickname(n) {
     if (name == undefined) return;
     if (name == "") name = n.user.username;
     var uname = symbols + (symbols == "" ? "" : " ") + name;
-    if (config.SymbolBlacklist.contains(n.user.id.toString())) uname = name;
+    if (config.SymbolBlacklist.includes(n.user.id.toString())) uname = name;
     if (uname.length > 32) uname = uname.substring(0, 32-3) + "...";
     if (uname == n.displayName) return;
     if (uname == n.nickname) return;
