@@ -530,7 +530,7 @@ function getMCServerStatus(ip, msg) {
 }
 
 var announcedBirthday = false
-var birthdayTimestamp = new Date("Fri Aug 28 2020 07:00:00 GMT+0100 (British Summer Time)").getTime()
+var birthdayTimestamp = Date.UTC(2020,7,28,6,30,0).getTime()
 
 function checkForBirthday() {
   if (new Date().getTime() > birthdayTimestamp && !announcedBirthday && new Date().getTime() < birthdayTimestamp + 30 * 1000) {
