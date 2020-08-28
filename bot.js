@@ -530,15 +530,13 @@ function getMCServerStatus(ip, msg) {
 }
 
 var announcedBirthday = false
-var birthdayTimestamp = new Date(2020,7,28,7,30,0).getTime()
+var birthdayTimestamp = new Date(2020,7,28,7,33,0).getTime()
 
 function checkForBirthday() {
   if (new Date().getTime() > birthdayTimestamp && !announcedBirthday && new Date().getTime() < birthdayTimestamp + 30 * 1000) {
     announcedBirthday = true
-    client.guilds.fetch('571615112570601503').then(g=>{
-      g.channels.fetch('577879389279223808').then(c=>{
-        c.send('Hey @everyone :\n\nToday (28th August) is the birthday of <@222344019458392065> .\nWish <@222344019458392065> a happy birthday when he gets online :cake: ')
-      }).catch(console.err)
+    client.channels.fetch('577879389279223808').then(c=>{
+      c.send('Hey @everyone :\n\nToday (28th August) is the birthday of <@222344019458392065> .\nWish <@222344019458392065> a happy birthday when he gets online :cake: ')
     }).catch(console.err)
   }
 }
