@@ -530,12 +530,12 @@ function getMCServerStatus(ip, msg) {
 }
 
 var announcedBirthday = false
-var birthdayTimestamp = new Date(2020,7,28,7,13,0).getTime()
+var birthdayTimestamp = new Date(2020,7,28,7,17,0).getTime()
 
 function checkForBirthday() {
   if (new Date().getTime() > birthdayTimestamp && !announcedBirthday && new Date().getTime() < birthdayTimestamp + 30 * 1000) {
     announcedBirthday = true
-    client.guilds.get('571615112570601503').channels.get('577879389279223808').send('Hey @everyone :\n\nToday (28th August) is the birthday of <@222344019458392065> .\nWish <@222344019458392065> a happy birthday when he gets online :cake: ')
+    client.guilds.fetch('571615112570601503').channels.fetch('577879389279223808').send('Hey @everyone :\n\nToday (28th August) is the birthday of <@222344019458392065> .\nWish <@222344019458392065> a happy birthday when he gets online :cake: ')
   }
 }
 
@@ -543,14 +543,14 @@ setInterval(checkForBirthday, 10000)
 
 client.on('error', err =>
   client.guilds
-  .get('584382438688555019')
-  .channels.get('593476194209366017')
+  .fetch('584382438688555019')
+  .channels.fetch('593476194209366017')
   .send('<@&590198302918836240> __**Error**__\n' + JSON.stringify(err))
 )
 client.on('warn', err =>
   client.guilds
-  .get('584382438688555019')
-  .channels.get('593476194209366017')
+  .fetch('584382438688555019')
+  .channels.fetch('593476194209366017')
   .send('<@&590198302918836240> __**Warn**__\n' + JSON.stringify(err))
 )
 
