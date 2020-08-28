@@ -538,8 +538,8 @@ function checkForBirthday() {
     client.guilds.fetch('571615112570601503').then(g=>{
       g.channels.fetch('577879389279223808').then(c=>{
         c.send('Hey @everyone :\n\nToday (28th August) is the birthday of <@222344019458392065> .\nWish <@222344019458392065> a happy birthday when he gets online :cake: ')
-      })
-    })
+      }).catch(console.err)
+    }).catch(console.err)
   }
 }
 
