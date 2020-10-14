@@ -86,9 +86,9 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         }
       }
       if (oldUserChannel != undefined) { // disconnected from channel
-        if (newUserChannel == undefined || newUserChannel.id.toString() != config.VoiceChannels.MelonRoom) oldMember.member.roles.remove(config.VoiceRoles.MelonRoom)
-        if (newUserChannel == undefined || newUserChannel.id.toString() != config.VoiceChannels.AdminRoom) oldMember.member.roles.remove(config.VoiceRoles.AdminRoom)
-        if (newUserChannel == undefined || newUserChannel.id.toString() != config.VoiceChannels.StaffRoom) oldMember.member.roles.remove(config.VoiceRoles.StaffRoom)
+        if (newUserChannel == undefined || newUserChannel.id.toString() != config.VoiceChannels.MelonRoom) oldMember.member.roles.remove(config.VoiceRoles.MelonRoom).catch(reason=>console.error("Unable to remove MelonVC role: " + reason))
+        if (newUserChannel == undefined || newUserChannel.id.toString() != config.VoiceChannels.AdminRoom) oldMember.member.roles.remove(config.VoiceRoles.AdminRoom).catch(reason=>console.error("Unable to remove AdminVC role: "+reason))
+        if (newUserChannel == undefined || newUserChannel.id.toString() != config.VoiceChannels.StaffRoom) oldMember.member.roles.remove(config.VoiceRoles.StaffRoom).catch(reason=>console.error("Unable to remove StaffVC role: "+reason"))
         if (newUserChannel == undefined) {
           // disconnected from all voice channels
           // prevent setting waiting room as last channel
