@@ -411,7 +411,7 @@ function speak(vc, text, speed = null, voice = null, callback = null) {
   if (voice == null) voice = 'english-us'
   var filename = `${__dirname}/recordings/speech-${new Date().getTime()}.wav`
 
-  exec(`"${__dirname}/espeak/espeak" --path "${__dirname}/espeak" "${text.replace(/"/g, '')}" -s "${speed.toString().replace(/"/g, '')}" -v "${voice.replace(/"/g, '')}" -w "${filename.replace(/"/g, '')}"`, err => {
+  exec(`espeak "${text.replace(/"/g, '')}" -s "${speed.toString().replace(/"/g, '')}" -v "${voice.replace(/"/g, '')}" -w "${filename.replace(/"/g, '')}"`, err => {
     if (err) {
       console.log(err)
       return
