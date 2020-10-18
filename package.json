@@ -32,6 +32,7 @@
     "moment": "^2.24.0",
     "moment-duration-format": "^2.2.2",
     "node-fetch": "^2.6.1",
+    "prism-media": "^1.2.2",
     "request": "^2.88.0",
     "say": "^0.15.0",
     "snekfetch": "^4.0.4",
