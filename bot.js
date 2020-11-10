@@ -22,6 +22,7 @@ const got = require('got')
 const {
   reject
 } = require('lodash')
+const escapeStringRegexp = require('escape-string-regexp')
 
 function mathjsNoImport() {
   throw new Error('function import is disabled.')
@@ -56,8 +57,14 @@ var uservc = {}
 
 client.on('voiceStateUpdate', (oldMember, newMember) => {
   client.users.fetch(oldMember.id).then(user => {
+    // ignore bot cuz they don't matter
     if (user.bot) return false
-    return true
+
+    // only listen for channel hopping in the owner's server
+    let b = 0
+    if (oldMember.guild != null) b += (oldMember.guild.id == config.AboutMe.ownerServer)
+    if (newMember.guild != null) b += (newMember.guild.id == config.AboutMe.ownerServer)
+    return b >= 1
   }).then(doMagic => {
     if (doMagic) {
       let oldUserChannel = oldMember.channel
@@ -72,13 +79,26 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         if (newUserChannel.id.toString() == config.VoiceChannels.StaffRoom) newMember.member.roles.add(config.VoiceRoles.StaffRoom)
         else if (newUserChannel.id.toString() == config.VoiceChannels.WaitingRoom) {
           // connected to waiting room
-          if (uservc[newMember.id.toString()] != undefined && uservc[newMember.id.toString()].type == 1 && uservc[newMember.id.toString()].time.getTime() > new Date().getTime() - 120000) {
-            client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
-              // user needs moving back to a channel
-              speak(newUserChannel, 'Moving you back to ' + c.name, null, null, () => {
-                newMember.setChannel(c)
-              })
-            })
+          if (uservc[newMember.id.toString()] != undefined && uservc[newMember.id.toString()].time.getTime() > new Date().getTime() - 600000) {
+            switch (uservc[newMember.id.toString()].type) {
+              case 1:
+                client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
+                  // user needs moving back to a channel
+                  speak(newUserChannel, 'Moving you back to ' + c.name, null, null, () => {
+                    newMember.setChannel(c)
+                  })
+                })
+                break;
+              case 2:
+                client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
+                  // user needs moving back to space
+                  var msgs = ['I love space too', 'Welcome to space', 'Space is fun', 'Do you like space?', 'Yay space!!', 'Space is not a lie', 'You love space']
+                  speak(newUserChannel, msgs[Math.floor(Math.random() * msgs.length)], null, null, () => {
+                    newMember.setChannel(c)
+                  })
+                })
+                break;
+            }
           } else {
             // time has expire and saved channel can be removed
             delete uservc[newMember.id.toString()]
@@ -87,9 +107,9 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         }
       }
       if (oldUserChannel != undefined) { // disconnected from channel
-        if (newUserChannel == undefined || newUserChannel.id.toString() != config.VoiceChannels.MelonRoom) oldMember.member.roles.remove(config.VoiceRoles.MelonRoom).catch(reason=>console.error("Unable to remove MelonVC role: " + reason))
-        if (newUserChannel == undefined || newUserChannel.id.toString() != config.VoiceChannels.AdminRoom) oldMember.member.roles.remove(config.VoiceRoles.AdminRoom).catch(reason=>console.error("Unable to remove AdminVC role: "+reason))
-        if (newUserChannel == undefined || newUserChannel.id.toString() != config.VoiceChannels.StaffRoom) oldMember.member.roles.remove(config.VoiceRoles.StaffRoom).catch(reason=>console.error("Unable to remove StaffVC role: "+reason))
+        if (newUserChannel == undefined || newUserChannel.id.toString() != config.VoiceChannels.MelonRoom) oldMember.member.roles.remove(config.VoiceRoles.MelonRoom).catch(reason => console.error("Unable to remove MelonVC role: " + reason))
+        if (newUserChannel == undefined || newUserChannel.id.toString() != config.VoiceChannels.AdminRoom) oldMember.member.roles.remove(config.VoiceRoles.AdminRoom).catch(reason => console.error("Unable to remove AdminVC role: " + reason))
+        if (newUserChannel == undefined || newUserChannel.id.toString() != config.VoiceChannels.StaffRoom) oldMember.member.roles.remove(config.VoiceRoles.StaffRoom).catch(reason => console.error("Unable to remove StaffVC role: " + reason))
         if (newUserChannel == undefined) {
           // disconnected from all voice channels
           // prevent setting waiting room as last channel
@@ -117,7 +137,7 @@ client.on('ready', () => {
   updateStatus()
   client.channels.fetch(config.Verify.channel).then(channel => {
     channel.messages.fetch(config.Verify.message).then(d => {
-      d.react('🍉').then(() => {}).catch(() => {})
+      d.react('🍉').then(() => { }).catch(() => { })
     }).catch(() => {
       console.error("Can't find verify message")
     })
@@ -129,7 +149,7 @@ client.on('ready', () => {
       channel.messages.fetch(config.ReactionRoles[i].message).then(d => {
         var o = Object.keys(config.ReactionRoles[i].reactions)
         for (let j = 0; j < o.length; j++)
-          d.react(o[j]).then(() => {}).catch(() => {
+          d.react(o[j]).then(() => { }).catch(() => {
             console.error("Can't react with " + o[j])
           })
       }).catch(() => {
@@ -156,11 +176,11 @@ client.on('messageReactionAdd', (r, u) => {
         member.roles.add(config.Verify.role).then(() => {
           member.createDM().then(dm => {
             dm.send(`You joined ${member.guild.name}`)
-          }).catch(() => {})
+          }).catch(() => { })
         }).catch(() => {
           member.createDM().then(dm => {
             dm.send(`I was unable to verify your account`)
-          }).catch(() => {})
+          }).catch(() => { })
         })
       }).catch(() => {
         console.error("VMRA: Can't fetch member")
@@ -174,7 +194,7 @@ client.on('messageReactionAdd', (r, u) => {
       if (f[0].reactions.hasOwnProperty(r.emoji.id.toString())) {
         r.message.channel.guild.fetch().then(guild => {
           guild.members.fetch(u.id.toString()).then(member => {
-            member.roles.add(f[0].reactions[r.emoji.id.toString()]).then(() => {}).catch(() => {})
+            member.roles.add(f[0].reactions[r.emoji.id.toString()]).then(() => { }).catch(() => { })
           }).catch(() => {
             console.error("MRA: Can't fetch member")
           })
@@ -192,7 +212,7 @@ client.on('messageReactionRemove', (r, u) => {
     if (f[0].reactions.hasOwnProperty(r.emoji.id.toString())) {
       r.message.guild.fetch().then(guild => {
         guild.members.fetch(u.id.toString()).then(member => {
-          member.roles.remove(f[0].reactions[r.emoji.id.toString()]).then(() => {}).catch(() => {})
+          member.roles.remove(f[0].reactions[r.emoji.id.toString()]).then(() => { }).catch(() => { })
         }).catch(() => {
           console.error("MRR: Can't fetch member")
         })
@@ -245,29 +265,26 @@ function updateStatus() {
 client.on('message', async msg => {
   if (msg.author.bot) return
   var cp = commandParser(msg.content)
-  if (msg.content.trim().toLowerCase() == 'yeet') {
-    msg.channel.send('YEET')
-    return
-  }
-  if (msg.content.trim().toLowerCase() == 'oof') {
-    msg.channel.send('Whoops')
-    return
-  }
-  if (msg.content.trim().toLowerCase() == 'foof yeet') {
-    var a = ['You died by activating too many bots!', 'Too many bots found you!', 'You were surrounded by bots. Give up now!']
-    msg.channel.send(a[Math.floor(Math.random() * (a.length - 1))])
-    return
-  }
-  if (msg.content.trim().toLowerCase() == 'fyeetoof') {
-    msg.channel.send('What is this?')
-    return
-  }
-  if (msg.content.trim().toLowerCase() == 'bruh') {
-    var a = ['Bruh']
-    msg.channel.send(a[Math.floor(Math.random() * (a.length - 1))])
-  }
+
   if (['~minecraft', '~mc'].includes(msg.content.trim().toLowerCase()) && config.MinecraftServers.hasOwnProperty(msg.guild.id.toString())) {
     getMCServerStatus(config.MinecraftServers[msg.guild.id.toString()], msg);
+    return
+  }
+  if (['~space'].includes(msg.content.trim().toLowerCase())) {
+    if (msg.guild == null) {
+      if (config['space!!!'].users.includes(msg.user.id.replace(new RegExp("^" + escapeStringRegexp(config.AboutMe.ownerId) + "$"), '%owner%'))) {
+        uservc[msg.member.id] = {
+          channel: config['space!!!'].channel,
+          time: new Date(),
+          type: 2
+        }
+        msg.channel.send('Join the waiting room in Melon Planet to continue your adventure')
+      } else {
+        msg.channel.send('No space :sob: ')
+      }
+    } else {
+      msg.delete().then(() => { }).catch(() => { })
+    }
     return
   }
   if (cp.isCmd) {
@@ -282,7 +299,7 @@ client.on('message', async msg => {
     if (cmd[0] == 'mute' && cmd.length > 1) {
       if (msg.author.roles.has(moderatorRole)) {
         msg.mentions.each(member => {
-          member.roles.remove(member.roles.cache.array().map(x => x.id)).then(() => {}).catch(() => {})
+          member.roles.remove(member.roles.cache.array().map(x => x.id)).then(() => { }).catch(() => { })
           member.roles.add([mutedRole])
         })
       }
@@ -298,9 +315,9 @@ client.on('message', async msg => {
         reason: 'Automated messaging'
       }).then(webhook => {
         webhook.send(mess).then(() => {
-          webhook.delete().then(() => {}).catch(x => console.error('webhook delete error', x))
+          webhook.delete().then(() => { }).catch(x => console.error('webhook delete error', x))
         }).catch(err => {
-          webhook.delete().then(() => {}).catch(x => console.error('webhook delete error', x))
+          webhook.delete().then(() => { }).catch(x => console.error('webhook delete error', x))
           console.error('message send error', err)
         })
       }).catch(x => console.error('webhook create error', x))
@@ -360,7 +377,7 @@ client.on('message', async msg => {
       var vc = msg.member.voice.channel
       try {
         playSong(vc, 'NeI-1Aq5CJw')
-      } catch (e) {}
+      } catch (e) { }
     } else if (['yt', 'youtube'].includes(cmd[0]) && cmd.length == 2) {
       if (cmd[1] == 'enable' && msg.author.id === config.AboutMe.ownerId) {
         youtubeenabled = true
@@ -376,13 +393,13 @@ client.on('message', async msg => {
         var vc = msg.member.voice.channel
         try {
           playSong(vc, cmd[1])
-        } catch (e) {}
+        } catch (e) { }
       } else {
         msg.channel.send('This feature might be disabled')
       }
     } else if (msg.content.toLowerCase() == '~stop') {
       var vc = msg.member.voice.channel
-      vc.leave().catch(() => {})
+      vc.leave().catch(() => { })
     } else if (msg.content.toLowerCase() == '~stopall' && config.AboutMe.ownerId == msg.author.id) {
       client.voice.connections.each(b => b.channel.leave())
     } else if (cmd[0] == 'say' && cmd.length > 1 && msg.author.id == config.AboutMe.ownerId) {
@@ -403,7 +420,7 @@ function playSong(vc, song) {
     })
   }).catch((err) => {
     console.error(err)
-    vc.leave().catch(() => {})
+    vc.leave().catch(() => { })
   })
 }
 
@@ -435,9 +452,9 @@ function speak(vc, text, speed = null, voice = null, callback = null) {
 
 var isGitDownloadRunning = false
 
-var deleteFolderRecursive = function(path) {
+var deleteFolderRecursive = function (path) {
   if (fs.existsSync(path)) {
-    fs.readdirSync(path).forEach(function(file, index) {
+    fs.readdirSync(path).forEach(function (file, index) {
       var curPath = path + '/' + file
       if (fs.lstatSync(curPath).isDirectory()) deleteFolderRecursive(curPath)
       else fs.unlinkSync(curPath)
@@ -507,7 +524,7 @@ function getRandomIdea(t) {
 
 function getMCServerStatus(ip, msg) {
   var url = 'https://api.mcsrvstat.us/2/' + ip
-  request(url, function(err, response, body) {
+  request(url, function (err, response, body) {
     if (err) {
       return msg.channel.send('Error getting Minecraft server status...')
     }
@@ -531,12 +548,12 @@ function getMCServerStatus(ip, msg) {
 }
 
 var announcedBirthday = false
-var birthdayTimestamp = new Date(2020,7,28,7,0,0).getTime()
+var birthdayTimestamp = new Date(2020, 7, 28, 7, 0, 0).getTime()
 
 function checkForBirthday() {
   if (new Date().getTime() > birthdayTimestamp && !announcedBirthday && new Date().getTime() < birthdayTimestamp + 30 * 1000) {
     announcedBirthday = true
-    client.channels.fetch('577879389279223808').then(c=>{
+    client.channels.fetch('577879389279223808').then(c => {
       c.send('Hey @everyone :\n\nToday (28th August) is the birthday of <@222344019458392065> .\nWish <@222344019458392065> a happy birthday when he gets online :cake: ')
     }).catch(console.err)
   }
@@ -546,15 +563,15 @@ setInterval(checkForBirthday, 10000)
 
 client.on('error', err =>
   client.guilds
-  .fetch('584382438688555019')
-  .channels.fetch('593476194209366017')
-  .send('<@&590198302918836240> __**Error**__\n' + JSON.stringify(err))
+    .fetch('584382438688555019')
+    .channels.fetch('593476194209366017')
+    .send('<@&590198302918836240> __**Error**__\n' + JSON.stringify(err))
 )
 client.on('warn', err =>
   client.guilds
-  .fetch('584382438688555019')
-  .channels.fetch('593476194209366017')
-  .send('<@&590198302918836240> __**Warn**__\n' + JSON.stringify(err))
+    .fetch('584382438688555019')
+    .channels.fetch('593476194209366017')
+    .send('<@&590198302918836240> __**Warn**__\n' + JSON.stringify(err))
 )
 
 client.login(process.env.TOKEN)

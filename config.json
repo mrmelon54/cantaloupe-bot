@@ -8,14 +8,16 @@
       "presence": "WATCHING",
       "activity": "for awesome commands"
     },
-    "ownerId": "222344019458392065"
+    "ownerId": "222344019458392065",
+    "ownerServer": "571615112570601503"
   },
   "Verify": {
     "channel": "688768701637722176",
     "message": "688769291860049958",
     "role": "688763467376754757"
   },
-  "ReactionRoles": [{
+  "ReactionRoles": [
+    {
       "channel": "685944696836456456",
       "message": "704340322658025472",
       "reactions": {
@@ -55,5 +57,12 @@
     "753740551081427017": "mc.onpointcoding.net",
     "665837764666982413": "captainalmmc.onpointcoding.net",
     "568189491349815316": "kckmapmaking.aternos.me"
+  },
+  "space!!!": {
+    "channel": "709015537388355645",
+    "users": [
+      "%owner%",
+      "693514593175208037"
+    ]
   }
 }
