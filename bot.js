@@ -273,7 +273,7 @@ client.on('message', async msg => {
   if (['~space'].includes(msg.content.trim().toLowerCase())) {
     if (msg.guild == null) {
       if (config['space!!!'].users.includes(msg.user.id.replace(new RegExp("^" + escapeStringRegexp(config.AboutMe.ownerId) + "$"), '%owner%'))) {
-        uservc[msg.member.id] = {
+        uservc[msg.user.id] = {
           channel: config['space!!!'].channel,
           time: new Date(),
           type: 2
