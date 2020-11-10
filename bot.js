@@ -85,6 +85,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
                 client.channels.fetch(uservc[newMember.id.toString()].channel).then(c => {
                   // user needs moving back to a channel
                   speak(newUserChannel, 'Moving you back to ' + c.name, null, null, () => {
+                    delete uservc[newMember.id.toString()]
                     newMember.setChannel(c)
                   })
                 })
@@ -94,6 +95,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
                   // user needs moving back to space
                   var msgs = ['I love space too', 'Welcome to space', 'Space is fun', 'Do you like space?', 'Yay space!!', 'Space is not a lie', 'You love space']
                   speak(newUserChannel, msgs[Math.floor(Math.random() * msgs.length)], null, null, () => {
+                    delete uservc[newMember.id.toString()]
                     newMember.setChannel(c)
                   })
                 })
