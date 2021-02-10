@@ -1,4 +1,5 @@
-FROM node:14
+FROM alpine:3.7
+RUN apk add --no-cache nodejs-current
 
 WORKDIR /usr/src/app
 
