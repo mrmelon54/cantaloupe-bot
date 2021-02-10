@@ -1,5 +1,5 @@
 FROM alpine:3.7
-RUN apk add --no-cache nodejs-current
+RUN apk add --no-cache --update nodejs npm
 
 WORKDIR /usr/src/app
 
