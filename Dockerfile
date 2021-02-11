@@ -1,12 +1,6 @@
-FROM alpine:3.8
-RUN apk add --no-cache --update nodejs-current npm build-base libtool autoconf automake python2
+FROM melon/debian-for-discord-vc
 
 WORKDIR /usr/src/app
-
-RUN npm config set python /usr/bin/python
-RUN npm -g i n
-RUN n v15
-RUN npm -g i npm
 
 COPY package*.json ./
 
@@ -14,8 +8,6 @@ RUN npm install
 RUN npm audit fix
 
 COPY . .
-
-RUN apk del --no-cache build-base libtool autoconf automake
 
 EXPOSE 8080
 CMD [ "npm", "start" ]
