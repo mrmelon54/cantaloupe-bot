@@ -5,7 +5,6 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN ln -s /usr/bin/python2 /usr/bin/python
 RUN npm config set python /usr/bin/python
 RUN npm install
 RUN npm audit fix
