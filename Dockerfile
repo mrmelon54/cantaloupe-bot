@@ -3,13 +3,13 @@ RUN apk add --no-cache --update nodejs-current npm build-base libtool autoconf a
 
 WORKDIR /usr/src/app
 
+RUN npm config set python /usr/bin/python
 RUN npm -g i n
 RUN n v15
 RUN npm -g i npm
 
 COPY package*.json ./
 
-RUN npm config set python /usr/bin/python
 RUN npm install
 RUN npm audit fix
 
