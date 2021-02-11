@@ -1,5 +1,5 @@
 FROM alpine:3.8
-RUN apk add --no-cache --update nodejs npm build-base libtool autoconf automake python2
+RUN apk add --no-cache --update nodejs-current npm build-base libtool autoconf automake python2
 
 WORKDIR /usr/src/app
 
