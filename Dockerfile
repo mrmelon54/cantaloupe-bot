@@ -1,5 +1,5 @@
 FROM alpine:3.8
-RUN apk add --no-cache --update nodejs npm build-base
+RUN apk add --no-cache --update nodejs npm build-base libtool
 
 WORKDIR /usr/src/app
 
@@ -10,7 +10,7 @@ RUN npm audit fix
 
 COPY . .
 
-RUN apk del --no-cache build-base
+RUN apk del --no-cache build-base libtool
 
 EXPOSE 8080
 CMD [ "npm", "start" ]
