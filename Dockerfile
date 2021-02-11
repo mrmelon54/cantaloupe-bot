@@ -1,10 +1,11 @@
 FROM alpine:3.8
-RUN apk add --no-cache --update nodejs npm build-base libtool autoconf automake
+RUN apk add --no-cache --update nodejs npm build-base libtool autoconf automake python3
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
+RUN ln -s /usr/bin/python3 /usr/lib/python
 RUN npm install
 RUN npm audit fix
 
