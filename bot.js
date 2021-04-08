@@ -431,7 +431,7 @@ function speak(vc, text, speed = null, voice = null, callback = null) {
   if (voice == null) voice = 'english-us'
   var filename = `${__dirname}/recordings/speech-${new Date().getTime()}.wav`
 
-  exec(`"${__dirname}/espeak" "${text.replace(/"/g, '')}" -s "${speed.toString().replace(/"/g, '')}" -v "${voice.replace(/"/g, '')}" -w "${filename.replace(/"/g, '')}"`, err => {
+  exec(`espeak "${text.replace(/"/g, '')}" -s "${speed.toString().replace(/"/g, '')}" -v "${voice.replace(/"/g, '')}" -w "${filename.replace(/"/g, '')}"`, err => {
     if (err) {
       console.log(err)
       return
@@ -563,17 +563,7 @@ function checkForBirthday() {
 
 setInterval(checkForBirthday, 10000)
 
-client.on('error', err =>
-  client.guilds
-    .fetch('584382438688555019')
-    .channels.fetch('593476194209366017')
-    .send('<@&590198302918836240> __**Error**__\n' + JSON.stringify(err))
-)
-client.on('warn', err =>
-  client.guilds
-    .fetch('584382438688555019')
-    .channels.fetch('593476194209366017')
-    .send('<@&590198302918836240> __**Warn**__\n' + JSON.stringify(err))
-)
+client.on('error', err => console.error(err));
+client.on('warn', err => console.error(err));
 
 client.login(process.env.TOKEN)

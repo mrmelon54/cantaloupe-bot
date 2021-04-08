@@ -4,11 +4,14 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
+RUN apt-get install espeak ffmpeg -y
+
 RUN npm install
 RUN npm audit fix
 
+RUN mkdir -p recordings
+
 COPY . .
-RUN chmod +x espeak
 
 EXPOSE 8080
 CMD [ "npm", "start" ]
