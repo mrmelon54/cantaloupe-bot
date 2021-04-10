@@ -136,7 +136,14 @@ function updateMemberNickname(n) {
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`)
+
+  // Update the status every 10 minutes
+  client.setInterval(()=>{
+    updateStatus()
+  },10*60*1000)
+
   updateStatus()
+
   client.channels.fetch(config.Verify.channel).then(channel => {
     channel.messages.fetch(config.Verify.message).then(d => {
       d.react('🍉').then(() => { }).catch(() => { })
