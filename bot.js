@@ -355,7 +355,7 @@ client.on('message', async msg => {
               break
             case 'ready':
             default:
-              getRandomIdea('ready').then(a => {
+              getRandomIdea('isReady').then(a => {
                 msg.channel.send(generateItemInfoEmbed(a))
               })
           }
@@ -500,14 +500,21 @@ function generateItemInfoEmbed(data) {
   return embed
 }
 
+// min = inclusive
+// max = exclusive
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * max) + min;
+}
+
 function getRandomIdea(t) {
   return new Promise((resolve, reject) => {
     got.post('https://ktane.onpointcoding.net/ideas/getmeta.php', {
-      responseType: 'json'
+      responseType: 'text'
     }).then(res => {
-      var d = res.body.data;
+      var d = res.body;
+      var ideas = JSON.parse(d).ideas;
       var modIdea = undefined
-      var filteredIdeas = d.filter(a => a.state === t)
+      var filteredIdeas = ideas.filter(a => a.state === t)
       if (filteredIdeas.length === 0) {
         resolve({
           name: "I couldn't find any ideas",
@@ -519,7 +526,7 @@ function getRandomIdea(t) {
         })
       } else {
         while (modIdea === undefined || modIdea === null) {
-          modIdea = filteredIdeas[getRandomInt(0, d.length - 1)]
+          modIdea = filteredIdeas[getRandomInt(0, d.length)]
         }
         resolve(modIdea)
       }
