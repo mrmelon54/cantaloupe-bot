@@ -475,13 +475,13 @@ var deleteFolderRecursive = function (path) {
 function generateItemInfoEmbed(data) {
   var modStates = {
     inProgress: '<:in_progress:585545462640017428>',
-    ready: '<:ready:585545462942138368>',
+    isReady: '<:ready:585545462942138368>',
     notReady: '<:not_ready:585545462602399744>',
     unknown: '<:unknown:585545462644211715>',
   }
   var stateColours = {
     inProgress: 0x00ff00,
-    ready: 0xffff00,
+    isReady: 0xffff00,
     notReady: 0xff0000,
     unknown: 0x777777,
   }
