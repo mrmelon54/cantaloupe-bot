@@ -502,7 +502,7 @@ function generateItemInfoEmbed(data) {
 
 function getRandomIdea(t) {
   return new Promise((resolve, reject) => {
-    got.post('https://ktane.onpointcoding.net/ideas-new/getmeta.php', {
+    got.post('https://ktane.onpointcoding.net/ideas/getmeta.php', {
       responseType: 'json'
     }).then(res => {
       var d = res.body.data;
