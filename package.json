@@ -27,7 +27,7 @@
     "escape-string-regexp": "^4.0.0",
     "express": "^4.16.4",
     "glob": "^7.1.5",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "lru-cache": "^6.0.0",
     "math.js": "^1.1.46",
     "mathjs": "^6.6.0",
