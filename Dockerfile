@@ -4,7 +4,9 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
+RUN apt-get update
 RUN apt-get install espeak ffmpeg -y
+RUN apt-get clean
 
 RUN npm install
 RUN npm audit fix
