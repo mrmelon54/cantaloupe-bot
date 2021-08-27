@@ -141,6 +141,8 @@ client.on('ready', () => {
   client.setInterval(()=>{
     updateStatus()
   },10*60*1000)
+  
+  setInterval(checkForBirthday, 10000)
 
   updateStatus()
 
@@ -574,8 +576,6 @@ function checkForBirthday() {
     }).catch(console.err)
   }
 }
-
-setInterval(checkForBirthday, 10000)
 
 client.on('error', err => console.error(err));
 client.on('warn', err => console.error(err));
