@@ -564,7 +564,7 @@ function getMCServerStatus(ip, msg) {
 }
 
 var announcedBirthday = false
-var birthdayTimestamp = new Date(2020, 7, 28, 0, 0, 0).getTime()
+var birthdayTimestamp = new Date(2021, 7, 28, 0, 0, 0).getTime()
 
 function checkForBirthday() {
   if (new Date().getTime() > birthdayTimestamp && !announcedBirthday && new Date().getTime() < birthdayTimestamp + 30 * 1000) {
