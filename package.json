@@ -7,7 +7,7 @@
     "start": "node bot.js"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=17.0.0"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "aio-mc-api": "^1.2.4",
     "algebra.js": "^0.2.6",
     "bufferutil": "^4.0.1",
-    "discord.js": "^12.5.1",
+    "discord.js": "^13.6.0",
     "dotenv": "^8.2.0",
     "download-git-repo": "^2.0.0",
     "enmap": "^5.2.3",
