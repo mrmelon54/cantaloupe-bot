@@ -9,7 +9,6 @@ RUN apt-get install espeak ffmpeg -y
 RUN apt-get clean
 
 RUN npm install
-RUN npm audit fix
 
 RUN mkdir -p recordings
 
