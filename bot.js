@@ -16,48 +16,6 @@ const validUrl = require("valid-url");
 const request = require("request");
 const got = require("got");
 const escapeStringRegexp = require("escape-string-regexp");
-const { curseforge } = require("aio-mc-api");
-
-function updateCurrentCurseforgeData() {
-  console.log("Checking curseforge data");
-  curseforge.getMultipleProjects(config["minecraft-mods"].mods, false).then((projects) => {
-    client.channels
-      .fetch(config["minecraft-mods"].channel)
-      .then((channel) => {
-        channel.messages
-          .fetch(config["minecraft-mods"].message)
-          .then((d) => {
-            projects.sort((a, b) => b.downloadCount - a.downloadCount);
-            console.log("Generating curseforge embed");
-            var embed = new Discord.MessageEmbed();
-            embed.setTitle("CurseForge Projects");
-            embed.setColor(0xf16436);
-            for (let i = 0; i < projects.length; i++) {
-              let x = projects[i];
-              embed.addField(`${x.name}`, `Downloads: ${fancyDownloadCountText(x.downloadCount)}\nWebsite: [${x.slug}](${x.websiteUrl})\nLatest download: [${x.latestFiles[0].fileName}](${x.latestFiles[0].downloadUrl})`, i % 2 == 0);
-            }
-            client.users
-              .fetch(config.AboutMe.ownerId)
-              .then((user) => {
-                console.log(user.username);
-                console.log(user.avatarURL({ dynamic: true }));
-                embed.setAuthor(user.username, user.avatarURL({ dynamic: true }), config["minecraft-mods"].authorUrl);
-                d.edit(embed);
-              })
-              .catch((err) => {
-                console.error(err);
-                console.error("Can't find owner account");
-              });
-          })
-          .catch(() => {
-            console.error("Can't find curseforge update message");
-          });
-      })
-      .catch(() => {
-        console.error("Can't find curseforge update channel");
-      });
-  });
-}
 
 function fancyDownloadCountText(v) {
   if (v >= 1000000) return `${Math.round(v / 100) / 10000000}B`;
@@ -86,7 +44,7 @@ function mathjssimplify(expr) {
 const streamOptions = { seek: 0, volume: 1 };
 
 // disable by default so people breaking it can't use it again afterwards
-var youtubeenabled = false;
+var youtubeenabled = true;
 var uservc = {};
 // { channel: <lastchannelid>, time: <lasttimeinchannel>, type:0 }
 
@@ -183,14 +141,9 @@ client.on("ready", () => {
     updateStatus();
   }, 10 * 60 * 1000);
 
-  client.setInterval(() => {
-    updateCurrentCurseforgeData();
-  }, 10 * 60 * 1000);
-
   setInterval(checkForBirthday, 10000);
 
   updateStatus();
-  updateCurrentCurseforgeData();
 
   client.channels
     .fetch(config.Verify.channel)
@@ -682,7 +635,7 @@ function getMCServerStatus(ip, msg) {
 }
 
 var announcedBirthday = false;
-var birthdayTimestamp = new Date(2022, 7, 28, 0, 0, 0).getTime();
+var birthdayTimestamp = new Date(new Date().getFullYear(), 7, 28, 0, 0, 0).getTime();
 
 function checkForBirthday() {
   if (new Date().getTime() > birthdayTimestamp && !announcedBirthday && new Date().getTime() < birthdayTimestamp + 10 * 60 * 1000) {
