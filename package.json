@@ -16,7 +16,7 @@
   "author": "MrMelon",
   "license": "MIT",
   "dependencies": {
-    "@discordjs/opus": "^0.3.2",
+    "@discordjs/opus": "^0.8.0",
     "@types/snekfetch": "^4.0.2",
     "aio-mc-api": "^1.2.4",
     "algebra.js": "^0.2.6",
